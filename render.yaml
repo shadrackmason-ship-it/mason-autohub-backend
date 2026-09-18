@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: mason-autohub-backend
+    env: python
+    region: oregon
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app
+    envVars:
+      - key: DATABASE_URL
+        scope: run_and_build
+        value: sqlite:///./mason_autohub.db
+      - key: SECRET_KEY
+        scope: run_and_build
+        value: change-in-production
+      - key: CORS_ORIGINS
+        scope: run_and_build
+        value: https://your-vercel-domain.vercel.app
+      - key: ENVIRONMENT
+        scope: run_and_build
+        value: production
